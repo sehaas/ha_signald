@@ -1,0 +1,10 @@
+{
+    "domain": "signald",
+    "name": "Signald Client",
+    "documentation": "https://github.com/sehaas/ha_signald",
+    "dependencies": [],
+    "codeowners": [],
+    "requirements": [
+        "git+https://gitlab.com/stavros/pysignald.git#pysignald"
+    ]
+}
