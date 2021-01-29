@@ -46,8 +46,8 @@ class SignaldNotificationService(BaseNotificationService):
         self._group = group
 
     def send_message(self, message="", **kwargs):
-        data = kwargs.get("data", {})
-        attachments = data.get("attachments", [])
+        data = (kwargs or {}).get("data") or {}
+        attachments = data.get("attachments") or []
         if self._group is not None:
             self._signal.send_group_message(self._group, message, False, attachments)
         else:
