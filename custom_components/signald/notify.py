@@ -35,20 +35,21 @@ def get_service(hass, config, discovery_info=None):
         _LOGGER.error("Either recp_nr or group is required")
         return None
 
-    signal = Signal(sender_nr, socket_path=socket)
-    return SignaldNotificationService(signal, recp_nr, group)
+    return SignaldNotificationService(socket, sender_nr, recp_nr, group)
 
 
 class SignaldNotificationService(BaseNotificationService):
-    def __init__(self, signal, recp_nr, group):
-        self._signal = signal
+    def __init__(self, socket, sender_nr, recp_nr, group):
+        self._socket = socket
+        self._sender_nr = sender_nr
         self._recp_nr = recp_nr
         self._group = group
 
     def send_message(self, message="", **kwargs):
-        data = (kwargs or {}).get("data") or {}
+        signal = Signal(self._sender_nr, socket_path=self._socket)
+        data = (kwargs or {}).get(ATTR_DATA) or {}
         attachments = data.get("attachments") or []
         if self._group is not None:
-            self._signal.send_group_message(self._group, message, False, attachments)
+            signal.send_group_message(self._group, message, False, attachments)
         else:
-            self._signal.send_message(self._recp_nr, message, False, attachments)
+            signal.send_message(self._recp_nr, message, False, attachments)
