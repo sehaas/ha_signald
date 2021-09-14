@@ -50,6 +50,6 @@ class SignaldNotificationService(BaseNotificationService):
         data = (kwargs or {}).get(ATTR_DATA) or {}
         attachments = data.get("attachments") or []
         if self._group is not None:
-            signal.send_group_message(self._group, message, False, attachments)
+            signal.send_group_message(self._group, message, True, attachments)
         else:
-            signal.send_message(self._recp_nr, message, False, attachments)
+            signal.send_message(self._recp_nr, message, True, attachments)
